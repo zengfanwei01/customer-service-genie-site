@@ -108,9 +108,10 @@ function sizeHeroPreview() {
 sizeHeroPreview();
 narrowScreen.addEventListener("change", sizeHeroPreview);
 
-// Open linked chapters before the browser scrolls to their anchor.
+// Settle disclosures before positioning the heading; native hash scrolling can
+// otherwise use the height of the chapter that is about to close.
 function revealTarget(hash) {
-  if (!hash) return;
+  if (!hash || hash === "#") return;
   let id;
   try {
     id = decodeURIComponent(hash.slice(1));
@@ -118,17 +119,117 @@ function revealTarget(hash) {
     return;
   }
   const target = document.getElementById(id);
-  const disclosure = target?.closest("details");
-  if (disclosure) disclosure.open = true;
+  for (let disclosure = target?.closest("details"); disclosure;) {
+    const group = disclosure.getAttribute("name");
+    if (group)
+      document.querySelectorAll("details[name]").forEach((other) => {
+        if (other !== disclosure && other.getAttribute("name") === group)
+          other.open = false;
+      });
+    disclosure.open = true;
+    disclosure = disclosure.parentElement?.closest("details");
+  }
+  return target;
+}
+let anchorFrame;
+function navigateToAnchor(
+  hash,
+  { history = false, focus = false, instant = false } = {},
+) {
+  const target = revealTarget(hash);
+  if (!target) return false;
+  closeMenu();
+  syncChapterSelector();
+  if (history && location.hash !== hash)
+    window.history.pushState(null, "", hash);
+  cancelAnimationFrame(anchorFrame);
+  anchorFrame = requestAnimationFrame(() => {
+    const summary =
+      target.matches("details") && target.querySelector(":scope > summary");
+    const heading =
+      summary && summary.getClientRects().length ? summary : target;
+    const offset = (header?.offsetHeight || 0) + 16;
+    const main = document.querySelector("main");
+    if (main?.contains(heading)) {
+      // Short chapters and the last homepage section need enough trailing
+      // scroll room for their heading to reach the same reading position.
+      main.style.setProperty("--anchor-end-space", "0px");
+      const remaining =
+        document.documentElement.scrollHeight -
+        (heading.getBoundingClientRect().top + window.scrollY);
+      main.style.setProperty(
+        "--anchor-end-space",
+        `${Math.max(0, Math.ceil(window.innerHeight - offset - remaining))}px`,
+      );
+    }
+    if (focus) {
+      const temporaryTabIndex =
+        !heading.hasAttribute("tabindex") && heading.tabIndex < 0;
+      if (temporaryTabIndex) {
+        heading.tabIndex = -1;
+        heading.addEventListener(
+          "blur",
+          () => heading.removeAttribute("tabindex"),
+          { once: true },
+        );
+      }
+      heading.focus({ preventScroll: true });
+    }
+    window.scrollTo({
+      top: heading.getBoundingClientRect().top + window.scrollY - offset,
+      behavior:
+        instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "instant"
+          : "smooth",
+    });
+  });
+  return true;
 }
 document.addEventListener("click", (event) => {
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  )
+    return;
+  const summary = event.target.closest(".guide-section > summary");
+  if (summary && !event.target.closest("a, button, input, select, textarea")) {
+    event.preventDefault();
+    const chapter = summary.parentElement;
+    if (chapter.open) {
+      chapter.open = false;
+      cancelAnimationFrame(anchorFrame);
+      syncChapterSelector();
+    } else navigateToAnchor(`#${chapter.id}`, { history: true, focus: true });
+    return;
+  }
   const link = event.target.closest("a[href]");
-  if (!link) return;
+  if (
+    !link ||
+    link.hasAttribute("download") ||
+    (link.target && link.target !== "_self")
+  )
+    return;
   const url = new URL(link.href, location.href);
-  if (url.origin === location.origin && url.pathname === location.pathname)
-    revealTarget(url.hash);
+  if (
+    url.origin === location.origin &&
+    url.pathname === location.pathname &&
+    url.search === location.search &&
+    url.hash
+  ) {
+    if (navigateToAnchor(url.hash, { history: true, focus: true }))
+      event.preventDefault();
+  }
 });
-window.addEventListener("hashchange", () => revealTarget(location.hash));
+window.addEventListener("hashchange", () =>
+  navigateToAnchor(location.hash, { instant: true }),
+);
+window.addEventListener("pageshow", (event) => {
+  if (!event.persisted) navigateToAnchor(location.hash, { instant: true });
+});
 revealTarget(location.hash);
 
 for (const group of ["guide-chapters", "home-questions"]) {
@@ -227,12 +328,7 @@ function syncChapterSelector() {
 }
 chapterSelector?.addEventListener("change", () => {
   if (!chapterSelector.value) return;
-  const hash = `#${chapterSelector.value}`;
-  revealTarget(hash);
-  location.hash = hash;
-  document
-    .getElementById(chapterSelector.value)
-    ?.scrollIntoView({ block: "start" });
+  navigateToAnchor(`#${chapterSelector.value}`, { history: true, focus: true });
 });
 document
   .querySelectorAll(".guide-section")
