@@ -24,11 +24,35 @@ mobileNav?.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && mobileNav && !mobileNav.hidden) {
     closeMenu();
-    menuButton.focus();
+    menuButton.focus({ preventScroll: true });
   }
 });
-narrowScreen.addEventListener("change", closeMenu);
 const header = document.querySelector(".site-header");
+function updateHeaderHeight() {
+  if (header)
+    document.documentElement.style.setProperty(
+      "--visible-header-height",
+      `${header.offsetHeight}px`,
+    );
+}
+updateHeaderHeight();
+if (header) new ResizeObserver(updateHeaderHeight).observe(header);
+document.addEventListener("pointerdown", (event) => {
+  if (mobileNav && !mobileNav.hidden && !header.contains(event.target))
+    closeMenu();
+});
+header?.addEventListener("focusout", (event) => {
+  if (!header.contains(event.relatedTarget)) closeMenu();
+});
+narrowScreen.addEventListener("change", () => {
+  const focusWasInMenu = mobileNav?.contains(document.activeElement);
+  closeMenu();
+  if (focusWasInMenu)
+    (menuButton.getClientRects().length
+      ? menuButton
+      : header.querySelector(".brand")
+    )?.focus({ preventScroll: true });
+});
 function updateHeader() {
   header?.classList.toggle("scrolled", window.scrollY > 12);
 }
@@ -79,12 +103,19 @@ function setupTabs(selector, onSelect) {
     panel?.setAttribute("aria-labelledby", tab.id);
     onSelect?.(tab);
     const tabList = tab.closest(".capability-tabs");
-    if (tabList && tabList.scrollWidth > tabList.clientWidth)
-      tab.scrollIntoView({ block: "nearest", inline: "nearest" });
-    if (focus) tab.focus();
+    if (tabList && tabList.scrollWidth > tabList.clientWidth) {
+      const bounds = tab.getBoundingClientRect();
+      const listBounds = tabList.getBoundingClientRect();
+      const left =
+        bounds.left < listBounds.left
+          ? bounds.left - listBounds.left
+          : Math.max(0, bounds.right - listBounds.right);
+      tabList.scrollBy({ left, behavior: "instant" });
+    }
+    if (focus) tab.focus({ preventScroll: true });
   }
   tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("click", () => select(tab, true));
     tab.addEventListener("keydown", (event) => {
       let next;
       if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
@@ -103,13 +134,34 @@ setupTabs('.capability-tabs [role="tab"]');
 
 const heroPreview = document.querySelector(".hero-preview");
 function sizeHeroPreview() {
-  if (heroPreview) heroPreview.open = !narrowScreen.matches;
+  if (!heroPreview) return;
+  const summary = heroPreview.querySelector(":scope > summary");
+  const focusedContent =
+    heroPreview.contains(document.activeElement) &&
+    document.activeElement !== summary;
+  heroPreview.open =
+    !narrowScreen.matches ||
+    location.hash === "#demo-preview" ||
+    focusedContent;
+  if (!narrowScreen.matches && document.activeElement === summary)
+    heroPreview
+      .querySelector('[role="tab"][aria-selected="true"]')
+      ?.focus({ preventScroll: true });
 }
 sizeHeroPreview();
 narrowScreen.addEventListener("change", sizeHeroPreview);
 
 // Settle disclosures before positioning the heading; native hash scrolling can
 // otherwise use the height of the chapter that is about to close.
+function openDisclosure(disclosure) {
+  const group = disclosure.getAttribute("name");
+  if (group)
+    document.querySelectorAll("details[name]").forEach((other) => {
+      if (other !== disclosure && other.getAttribute("name") === group)
+        other.open = false;
+    });
+  disclosure.open = true;
+}
 function revealTarget(hash) {
   if (!hash || hash === "#") return;
   let id;
@@ -120,28 +172,29 @@ function revealTarget(hash) {
   }
   const target = document.getElementById(id);
   for (let disclosure = target?.closest("details"); disclosure;) {
-    const group = disclosure.getAttribute("name");
-    if (group)
-      document.querySelectorAll("details[name]").forEach((other) => {
-        if (other !== disclosure && other.getAttribute("name") === group)
-          other.open = false;
-      });
-    disclosure.open = true;
+    openDisclosure(disclosure);
     disclosure = disclosure.parentElement?.closest("details");
   }
   return target;
 }
 let anchorFrame;
-function navigateToAnchor(
-  hash,
-  { history = false, focus = false, instant = false } = {},
+function focusWithoutScrolling(element) {
+  const temporaryTabIndex =
+    !element.hasAttribute("tabindex") && element.tabIndex < 0;
+  if (temporaryTabIndex) {
+    element.tabIndex = -1;
+    element.addEventListener(
+      "blur",
+      () => element.removeAttribute("tabindex"),
+      { once: true },
+    );
+  }
+  element.focus({ preventScroll: true });
+}
+function positionReadingTarget(
+  target,
+  { focus = false, instant = false } = {},
 ) {
-  const target = revealTarget(hash);
-  if (!target) return false;
-  closeMenu();
-  syncChapterSelector();
-  if (history && location.hash !== hash)
-    window.history.pushState(null, "", hash);
   cancelAnimationFrame(anchorFrame);
   anchorFrame = requestAnimationFrame(() => {
     const summary =
@@ -162,19 +215,7 @@ function navigateToAnchor(
         `${Math.max(0, Math.ceil(window.innerHeight - offset - remaining))}px`,
       );
     }
-    if (focus) {
-      const temporaryTabIndex =
-        !heading.hasAttribute("tabindex") && heading.tabIndex < 0;
-      if (temporaryTabIndex) {
-        heading.tabIndex = -1;
-        heading.addEventListener(
-          "blur",
-          () => heading.removeAttribute("tabindex"),
-          { once: true },
-        );
-      }
-      heading.focus({ preventScroll: true });
-    }
+    if (focus) focusWithoutScrolling(heading);
     window.scrollTo({
       top: heading.getBoundingClientRect().top + window.scrollY - offset,
       behavior:
@@ -183,7 +224,72 @@ function navigateToAnchor(
           : "smooth",
     });
   });
+}
+function clearReadingSpace() {
+  document
+    .querySelector("main")
+    ?.style.setProperty("--anchor-end-space", "0px");
+}
+function captureReadingState() {
+  return {
+    chapter: document.querySelector(".guide-section[open]")?.id || "",
+    demoOpen: heroPreview?.open,
+    left: window.scrollX,
+    top: window.scrollY,
+    endSpace:
+      document
+        .querySelector("main")
+        ?.style.getPropertyValue("--anchor-end-space") || "0px",
+    focus: document.activeElement,
+  };
+}
+let unanchoredReadingState = captureReadingState();
+function navigateToAnchor(
+  hash,
+  { history = false, focus = false, instant = false } = {},
+) {
+  const previousState =
+    history && !location.hash ? captureReadingState() : null;
+  const target = revealTarget(hash);
+  if (!target) return false;
+  if (previousState) unanchoredReadingState = previousState;
+  dismissImageForNavigation();
+  closeMenu();
+  syncChapterSelector();
+  if (history && location.hash !== hash)
+    window.history.pushState(null, "", hash);
+  positionReadingTarget(target, { focus, instant });
   return true;
+}
+function restoreUnanchoredReadingState() {
+  cancelAnimationFrame(anchorFrame);
+  dismissImageForNavigation();
+  closeMenu();
+  document.querySelectorAll(".guide-section").forEach((chapter) => {
+    chapter.open = chapter.id === unanchoredReadingState.chapter;
+  });
+  if (heroPreview)
+    heroPreview.open = !narrowScreen.matches || unanchoredReadingState.demoOpen;
+  document
+    .querySelector("main")
+    ?.style.setProperty("--anchor-end-space", unanchoredReadingState.endSpace);
+  syncChapterSelector();
+  anchorFrame = requestAnimationFrame(() => {
+    const previousFocus = unanchoredReadingState.focus;
+    const main = document.querySelector("main");
+    if (
+      previousFocus !== document.body &&
+      previousFocus?.isConnected &&
+      previousFocus.getClientRects().length
+    )
+      focusWithoutScrolling(previousFocus);
+    else if (main) focusWithoutScrolling(main);
+    window.scrollTo({
+      left: unanchoredReadingState.left,
+      top: unanchoredReadingState.top,
+      behavior: "instant",
+    });
+  });
 }
 document.addEventListener("click", (event) => {
   if (
@@ -195,6 +301,23 @@ document.addEventListener("click", (event) => {
     event.altKey
   )
     return;
+  const questionSummary = event.target.closest(".faq-list details > summary");
+  if (
+    questionSummary &&
+    !event.target.closest("a, button, input, select, textarea")
+  ) {
+    event.preventDefault();
+    const question = questionSummary.parentElement;
+    if (question.open) {
+      question.open = false;
+      cancelAnimationFrame(anchorFrame);
+      clearReadingSpace();
+    } else {
+      openDisclosure(question);
+      positionReadingTarget(questionSummary, { focus: true });
+    }
+    return;
+  }
   const summary = event.target.closest(".guide-section > summary");
   if (summary && !event.target.closest("a, button, input, select, textarea")) {
     event.preventDefault();
@@ -202,6 +325,7 @@ document.addEventListener("click", (event) => {
     if (chapter.open) {
       chapter.open = false;
       cancelAnimationFrame(anchorFrame);
+      clearReadingSpace();
       syncChapterSelector();
     } else navigateToAnchor(`#${chapter.id}`, { history: true, focus: true });
     return;
@@ -224,9 +348,13 @@ document.addEventListener("click", (event) => {
       event.preventDefault();
   }
 });
-window.addEventListener("hashchange", () =>
-  navigateToAnchor(location.hash, { instant: true }),
-);
+window.addEventListener("hashchange", () => {
+  dismissImageForNavigation();
+  closeMenu();
+  if (location.hash)
+    navigateToAnchor(location.hash, { instant: true, focus: true });
+  else restoreUnanchoredReadingState();
+});
 window.addEventListener("pageshow", (event) => {
   if (!event.persisted) navigateToAnchor(location.hash, { instant: true });
 });
@@ -285,9 +413,19 @@ let imageOpener;
 const closeButton = document.querySelector(".dialog-close");
 const dialogZoom = document.querySelector(".dialog-zoom");
 let previousOverflow = "";
+let dialogScrollLocked = false;
+let returnImageFocus = true;
+function dismissImageForNavigation() {
+  if (dialogScrollLocked) returnImageFocus = false;
+  if (imageDialog?.open) imageDialog.close();
+}
 imageOpeners.forEach((opener) =>
   opener.addEventListener("click", () => {
+    if (imageDialog.open) return;
+    closeMenu();
+    opener.focus({ preventScroll: true });
     imageOpener = opener;
+    returnImageFocus = true;
     const screenshot = document.querySelector("#product-screenshot");
     const image = imageDialog.querySelector("img");
     image.src = screenshot.src;
@@ -299,16 +437,70 @@ imageOpeners.forEach((opener) =>
     imageDialog.classList.remove("image-zoomed");
     dialogZoom.setAttribute("aria-pressed", "false");
     dialogZoom.textContent = "查看实际尺寸";
-    previousOverflow = document.body.style.overflow;
+    if (!dialogScrollLocked) {
+      previousOverflow = document.body.style.overflow;
+      dialogScrollLocked = true;
+    }
     document.body.style.overflow = "hidden";
     imageDialog.showModal();
+    closeButton.focus({ preventScroll: true });
     imageDialog.querySelector(".dialog-image-wrap").scrollTo(0, 0);
   }),
 );
 closeButton?.addEventListener("click", () => imageDialog.close());
 imageDialog?.addEventListener("click", (event) => {
-  if (event.target === imageDialog) imageDialog.close();
+  const bounds = imageDialog.getBoundingClientRect();
+  if (
+    event.target === imageDialog &&
+    (event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom)
+  )
+    imageDialog.close();
 });
+imageDialog?.addEventListener("keydown", (event) => {
+  if (event.key !== "Tab") return;
+  const controls = [
+    ...imageDialog.querySelectorAll(
+      "button, a[href], input, select, textarea, [tabindex]",
+    ),
+  ].filter(
+    (element) =>
+      !element.matches(":disabled") &&
+      element.tabIndex >= 0 &&
+      element.getClientRects().length,
+  );
+  if (!controls.length) return;
+  const current = controls.indexOf(document.activeElement);
+  const next = event.shiftKey
+    ? current <= 0
+      ? controls.length - 1
+      : current - 1
+    : (current + 1) % controls.length;
+  event.preventDefault();
+  controls[next].focus({ preventScroll: true });
+});
+imageDialog
+  ?.querySelector(".dialog-image-wrap")
+  .addEventListener("keydown", (event) => {
+    if (
+      !imageDialog.classList.contains("image-zoomed") ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    )
+      return;
+    const direction = {
+      ArrowDown: { top: 48 },
+      ArrowUp: { top: -48 },
+      ArrowRight: { left: 48 },
+      ArrowLeft: { left: -48 },
+    }[event.key];
+    if (!direction) return;
+    event.preventDefault();
+    event.currentTarget.scrollBy({ ...direction, behavior: "instant" });
+  });
 function toggleZoom() {
   const zoomed = imageDialog.classList.toggle("image-zoomed");
   dialogZoom.setAttribute("aria-pressed", String(zoomed));
@@ -317,8 +509,12 @@ function toggleZoom() {
 dialogZoom?.addEventListener("click", toggleZoom);
 imageDialog?.querySelector("img").addEventListener("click", toggleZoom);
 imageDialog?.addEventListener("close", () => {
+  // A queued close event from the previous opening must not unlock or steal
+  // focus from a dialog that was already reopened.
+  if (imageDialog.open) return;
   document.body.style.overflow = previousOverflow;
-  imageOpener?.focus();
+  dialogScrollLocked = false;
+  if (returnImageFocus) imageOpener?.focus({ preventScroll: true });
 });
 
 const chapterSelector = document.querySelector("#guide-chapter");

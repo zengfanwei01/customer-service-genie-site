@@ -19,7 +19,9 @@
 }
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-height) + 16px);
+  scroll-padding-top: calc(
+    var(--visible-header-height, var(--header-height)) + 16px
+  );
 }
 body {
   margin: 0;
@@ -90,7 +92,7 @@ summary:focus-visible,
   transform: translateY(0);
 }
 .site-header {
-  height: var(--header-height);
+  min-height: var(--header-height);
   background: rgba(255, 255, 255, 0.95);
   border-bottom: 1px solid transparent;
   position: sticky;
@@ -102,7 +104,8 @@ summary:focus-visible,
   border-color: var(--line);
 }
 .header-inner {
-  height: 100%;
+  min-height: calc(var(--header-height) - 1px);
+  padding-block: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -112,6 +115,22 @@ summary:focus-visible,
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
+}
+.site-header .brand {
+  min-width: 0;
+  flex-shrink: 1;
+}
+.site-header .brand > span {
+  min-width: 0;
+}
+.site-header .brand small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.site-header .brand img,
+.menu-toggle {
   flex-shrink: 0;
 }
 .brand > span {
@@ -199,13 +218,17 @@ summary:focus-visible,
 }
 .mobile-nav {
   position: absolute;
-  top: 72px;
+  top: 100%;
   left: 0;
   right: 0;
   background: white;
   padding: 12px 24px 24px;
   border-bottom: 1px solid var(--line);
   box-shadow: 0 15px 30px rgba(30, 30, 60, 0.07);
+  max-height: calc(100vh - var(--visible-header-height, var(--header-height)));
+  max-height: calc(100dvh - var(--visible-header-height, var(--header-height)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .mobile-nav a {
   display: block;
@@ -1056,6 +1079,7 @@ summary:focus-visible,
   grid-template-columns: 1fr 1fr;
   gap: 0 48px;
   align-items: start;
+  overflow-anchor: none;
 }
 .faq-list details {
   border-bottom: 1px solid #e3dfeb;
@@ -1721,6 +1745,12 @@ summary:focus-visible,
     flex-wrap: wrap;
     gap: 17px;
   }
+  .site-footer nav a,
+  .guide-sidebar nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
   .guide-main {
     padding-top: 25px;
   }
@@ -2036,7 +2066,6 @@ summary:focus-visible,
     --header-height: 68px;
   }
   .mobile-nav {
-    top: 68px;
     padding-inline: 16px;
   }
   .menu-toggle {
