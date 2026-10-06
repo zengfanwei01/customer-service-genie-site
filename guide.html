@@ -64,21 +64,40 @@
         <aside class="guide-sidebar">
           <div class="mobile-guide-directory">
             <label for="guide-chapter">阅读目录</label>
-            <select id="guide-chapter">
-              <option value="" disabled>选择阅读章节</option>
-              <optgroup label="开始使用">
-                <option value="installation">01 安装与准备</option>
-                <option value="connect">02 连接抖店</option>
-                <option value="knowledge">03 知识与模型</option>
-                <option value="reception">04 观察与授权</option>
-              </optgroup>
-              <optgroup label="日常使用">
-                <option value="handoff">接管、暂停与提醒</option>
-                <option value="assistant">小二助手</option>
-                <option value="continuity">无人值守接待</option>
-                <option value="data">数据与接待边界</option>
-              </optgroup>
-            </select>
+            <div class="chapter-select">
+              <select id="guide-chapter">
+                <option value="" disabled>选择阅读章节</option>
+                <optgroup label="开始使用">
+                  <option value="installation">01 安装与准备</option>
+                  <option value="connect">02 连接抖店</option>
+                  <option value="knowledge">03 知识与模型</option>
+                  <option value="reception">04 观察与授权</option>
+                </optgroup>
+                <optgroup label="日常使用">
+                  <option value="handoff">接管、暂停与提醒</option>
+                  <option value="assistant">小二助手</option>
+                  <option value="continuity">无人值守接待</option>
+                  <option value="data">数据与接待边界</option>
+                </optgroup>
+              </select>
+              <svg
+                class="chapter-select-arrow"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="m6 9 6 6 6-6"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
           </div>
           <nav aria-label="指南目录">
             <strong>开始使用</strong><a href="#installation">01 安装与准备</a
@@ -94,10 +113,12 @@
         <div class="guide-content">
           <details class="guide-checklist" data-checklist>
             <summary>
-              <strong id="checklist-title">开始前的准备清单</strong>
-              <span id="checklist-status" role="status" aria-live="polite"
-                >0 / 4 项准备完成</span
-              >
+              <span class="checklist-heading">
+                <strong id="checklist-title">开始前的准备清单</strong>
+                <span id="checklist-status" role="status" aria-live="polite"
+                  >0 / 4 项准备完成</span
+                >
+              </span>
             </summary>
             <div class="checklist-body">
               <label

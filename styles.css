@@ -602,6 +602,10 @@ summary:focus-visible,
 .capability-tabs button:hover {
   background: #faf9ff;
 }
+.capability-tabs button:focus-visible {
+  outline-offset: -4px;
+  z-index: 1;
+}
 .capability-tabs button[aria-selected="true"] {
   color: var(--purple);
   background: #f5f3ff;
@@ -732,11 +736,14 @@ summary:focus-visible,
 }
 .document-types {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
   margin-bottom: 16px;
 }
 .document-types span {
+  white-space: nowrap;
+  flex-shrink: 0;
   font-size: 0.75rem;
   border: 1px solid #e3e2ed;
   padding: 7px 12px;
@@ -778,11 +785,15 @@ summary:focus-visible,
 }
 .knowledge-trail {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 18px;
   margin-top: 20px;
   font-size: 0.8125rem;
   color: #70677b;
+}
+.knowledge-trail span {
+  white-space: nowrap;
 }
 .knowledge-trail .trail-final {
   color: var(--purple);
@@ -914,6 +925,34 @@ summary:focus-visible,
   font-size: 0.875rem;
   color: #5e566c;
   cursor: pointer;
+}
+.model-details summary,
+.other-platforms summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  list-style: none;
+}
+.model-details summary::-webkit-details-marker,
+.other-platforms summary::-webkit-details-marker {
+  display: none;
+}
+.model-details summary::after,
+.other-platforms summary::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  margin-right: 5px;
+  flex-shrink: 0;
+}
+.model-details[open] summary::after,
+.other-platforms[open] summary::after {
+  transform: translateY(2px) rotate(225deg);
 }
 .model-details p {
   font-size: 1rem;
@@ -1101,13 +1140,7 @@ summary:focus-visible,
   display: none;
 }
 .faq-list summary:after {
-  content: "+";
-  font-size: 1.375rem;
   color: #70677b;
-  flex-shrink: 0;
-}
-.faq-list details[open] summary:after {
-  content: "−";
 }
 .faq-list details p {
   font-size: 1rem;
@@ -1267,7 +1300,13 @@ summary:focus-visible,
 }
 .guide-sidebar nav {
   position: sticky;
-  top: 108px;
+  top: calc(var(--visible-header-height, var(--header-height)) + 24px);
+  max-height: calc(
+    100dvh - var(--visible-header-height, var(--header-height)) - 48px
+  );
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-bottom: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1290,6 +1329,7 @@ summary:focus-visible,
   color: var(--purple);
 }
 .guide-content {
+  min-width: 0;
   max-width: 900px;
   overflow-anchor: none;
 }
@@ -1303,10 +1343,16 @@ summary:focus-visible,
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
   padding: 17px 22px;
   cursor: pointer;
   list-style: none;
+}
+.checklist-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  min-width: 0;
 }
 .guide-checklist > summary::-webkit-details-marker {
   display: none;
@@ -1320,13 +1366,8 @@ summary:focus-visible,
   color: #70677b;
 }
 .guide-checklist > summary:after {
-  content: "+";
   margin-left: auto;
   color: var(--purple);
-  font-size: 1.375rem;
-}
-.guide-checklist[open] > summary:after {
-  content: "−";
 }
 .checklist-body {
   padding: 0 22px 20px;
@@ -1383,14 +1424,31 @@ summary:focus-visible,
   margin-bottom: 3px;
 }
 .guide-section > summary:after {
-  content: "+";
-  font-size: 1.375rem;
   color: #70677b;
-  flex-shrink: 0;
 }
 .guide-section[open] > summary:after {
-  content: "−";
   color: var(--purple);
+}
+.faq-list summary::after,
+.guide-checklist > summary::after,
+.guide-section > summary::after,
+.disclosure-mark::after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  background:
+    linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+    linear-gradient(currentColor, currentColor) center / 1.5px 12px no-repeat;
+}
+.faq-list details[open] summary::after,
+.guide-checklist[open] > summary::after,
+.guide-section[open] > summary::after,
+.hero-preview[open] .disclosure-mark::after {
+  background-size:
+    12px 1.5px,
+    0 0;
 }
 .guide-section[open] > summary h2 {
   color: var(--purple-deep);
@@ -1452,6 +1510,7 @@ summary:focus-visible,
 }
 .os-selector {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
   margin: 20px 0;
 }
@@ -1609,15 +1668,9 @@ summary:focus-visible,
     margin-top: 3px;
   }
   .disclosure-mark {
-    font-size: 1.5rem;
-    color: var(--purple);
-  }
-  .hero-preview[open] .disclosure-mark {
     font-size: 0;
-  }
-  .hero-preview[open] .disclosure-mark:after {
-    content: "−";
-    font-size: 1.5rem;
+    color: var(--purple);
+    flex-shrink: 0;
   }
   .hero-demo-wrap:before {
     display: none;
@@ -1761,7 +1814,7 @@ summary:focus-visible,
     font-size: 2rem;
   }
   .guide-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
     padding-top: 20px;
   }
@@ -1771,6 +1824,9 @@ summary:focus-visible,
   }
   .guide-sidebar nav {
     position: static;
+    max-height: none;
+    overflow: visible;
+    padding-bottom: 0;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 8px 17px;
@@ -2133,8 +2189,8 @@ summary:focus-visible,
   }
   .capability-tabs button {
     flex: 1 0 auto;
-    min-width: 84px;
-    padding: 12px 14px;
+    min-width: 68px;
+    padding: 12px 6px;
     min-height: 48px;
     font-size: 0.875rem;
     scroll-snap-align: start;
@@ -2231,22 +2287,42 @@ summary:focus-visible,
     display: none;
   }
   .mobile-guide-directory {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 12px;
   }
   .mobile-guide-directory label {
     font-size: 0.875rem;
     color: var(--muted);
+    flex-shrink: 0;
+  }
+  .chapter-select {
+    position: relative;
+    flex: 1 1 13rem;
+    min-width: 0;
+  }
+  .chapter-select-arrow {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .chapter-select:focus-within .chapter-select-arrow {
+    color: var(--purple);
   }
   .mobile-guide-directory select {
+    appearance: none;
+    -webkit-appearance: none;
     font: inherit;
     font-size: 1rem;
     min-height: 48px;
     width: 100%;
-    padding: 10px 30px 10px 12px;
-    background: white;
+    min-width: 0;
+    padding: 10px 52px 10px 16px;
+    background: var(--paper);
     border: 1px solid #ddd7ed;
     border-radius: 8px;
     color: var(--ink);
@@ -2317,5 +2393,41 @@ summary:focus-visible,
     font-size: 0.8125rem;
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     flex-shrink: 0;
+  }
+}
+@media (max-width: 360px) {
+  .store-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 6px 11px;
+  }
+  .store-row .shop-icon {
+    grid-row: 1 / span 2;
+  }
+  .store-row .store-state {
+    grid-column: 2;
+    justify-self: start;
+    margin-left: 0;
+  }
+  .knowledge-document {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+  }
+  .knowledge-document .document-badge {
+    grid-column: 2;
+    justify-self: start;
+    margin-left: 0;
+  }
+  .demo-store {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 11px;
+  }
+  .demo-store .mode-chip {
+    grid-column: 2;
+    justify-self: start;
+    margin-left: 0;
   }
 }
