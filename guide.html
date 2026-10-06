@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="客服精灵使用指南：安装桌面客户端、连接抖店飞鸽、准备本店知识、确认模型与逐店授权，以及人工接管和数据边界。"
+    />
+    <meta name="theme-color" content="#5856d6" />
+    <title>使用指南 · 客服精灵</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body class="compact-guide">
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="客服精灵首页"
+          ><img
+            src="assets/genie-mark.svg"
+            width="42"
+            height="42"
+            alt=""
+          /><span>客服精灵<small>KEFU GENIE</small></span></a
+        >
+        <nav class="desktop-nav" aria-label="主要导航">
+          <a href="index.html#capabilities">产品能力</a
+          ><a href="index.html#product">产品界面</a
+          ><a href="index.html#platforms">平台支持</a>
+        </nav>
+        <a class="button button-small button-dark header-cta" href="index.html"
+          >返回产品首页</a
+        ><button
+          class="menu-toggle"
+          type="button"
+          aria-label="打开导航菜单"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+        >
+          <span></span><span></span>
+        </button>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="手机导航" hidden>
+        <a href="index.html">产品首页</a><a href="#installation">安装准备</a
+        ><a href="#connect">连接抖店</a><a href="#knowledge">知识与模型</a
+        ><a href="#reception">开启接待</a>
+      </nav>
+    </header>
+    <main id="main" class="container guide-main">
+      <div class="guide-hero">
+        <p class="eyebrow">客服精灵 · 使用指南</p>
+        <h1>跟着指南，一步一步来。</h1>
+        <p>选择你需要的章节。先准备资料、确认连接，再逐店开启接待。</p>
+        <span class="guide-version"
+          >适用于客户端 0.10.3 · 内容核对于 2026 年 10 月 6 日</span
+        >
+      </div>
+      <div class="guide-layout">
+        <aside class="guide-sidebar">
+          <div class="mobile-guide-directory">
+            <label for="guide-chapter">阅读目录</label>
+            <select id="guide-chapter">
+              <option value="" disabled>选择阅读章节</option>
+              <optgroup label="开始使用">
+                <option value="installation">01 安装与准备</option>
+                <option value="connect">02 连接抖店</option>
+                <option value="knowledge">03 知识与模型</option>
+                <option value="reception">04 观察与授权</option>
+              </optgroup>
+              <optgroup label="日常使用">
+                <option value="handoff">接管、暂停与提醒</option>
+                <option value="assistant">小二助手</option>
+                <option value="continuity">无人值守接待</option>
+                <option value="data">数据与接待边界</option>
+              </optgroup>
+            </select>
+          </div>
+          <nav aria-label="指南目录">
+            <strong>开始使用</strong><a href="#installation">01 安装与准备</a
+            ><a href="#connect">02 连接抖店</a
+            ><a href="#knowledge">03 知识与模型</a
+            ><a href="#reception">04 观察与授权</a><strong>日常使用</strong
+            ><a href="#handoff">接管、暂停与提醒</a
+            ><a href="#assistant">小二助手</a
+            ><a href="#continuity">无人值守接待</a
+            ><a href="#data">数据与接待边界</a>
+          </nav>
+        </aside>
+        <div class="guide-content">
+          <details class="guide-checklist" data-checklist>
+            <summary>
+              <strong id="checklist-title">开始前的准备清单</strong>
+              <span id="checklist-status" role="status" aria-live="polite"
+                >0 / 4 项准备完成</span
+              >
+            </summary>
+            <div class="checklist-body">
+              <label
+                ><input id="check-device" type="checkbox" /><span
+                  >有一台接待用的 Windows 或 Mac 电脑</span
+                ></label
+              ><label
+                ><input id="check-package" type="checkbox" /><span
+                  >已从产品提供方获取客户端安装包与扩展</span
+                ></label
+              ><label
+                ><input id="check-account" type="checkbox" /><span
+                  >有可登录飞鸽的抖店账号</span
+                ></label
+              ><label
+                ><input id="check-knowledge" type="checkbox" /><span
+                  >准备好商品资料、发货规则与售后政策</span
+                ></label
+              >
+              <p>
+                勾选只记录你在本浏览器里的准备进度，不会连接店铺或授予接待权限。
+              </p>
+            </div>
+          </details>
+          <details
+            id="installation"
+            class="guide-section"
+            name="guide-chapters"
+            open
+          >
+            <summary>
+              <h2>
+                <span class="guide-kicker">01 / 安装与准备</span
+                >把精灵安在接待用的电脑上。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <p>
+                客服精灵是桌面客户端，官网可用手机查看，但店铺接待需要在电脑上运行。当前安装包由产品提供方交付，本网站暂不提供公开下载。
+              </p>
+              <div
+                class="os-selector"
+                role="group"
+                aria-label="选择你的电脑系统"
+              >
+                <button type="button" data-os="windows" aria-pressed="true">
+                  Windows</button
+                ><button type="button" data-os="mac" aria-pressed="false">
+                  macOS
+                </button>
+              </div>
+              <div class="os-panel" data-os-panel="windows">
+                <h3>Windows 10 / 11 · x64</h3>
+                <ol>
+                  <li>
+                    选择适用于 Intel / AMD x64
+                    的安装程序，按安装向导完成安装。当前没有原生 ARM64 或 32
+                    位版本。
+                  </li>
+                  <li>
+                    安装 Google Chrome。客户端需要对应 Chrome
+                    用户中的飞鸽登录状态与扩展。
+                  </li>
+                  <li>
+                    使用安装包附带的扩展目录；普通安装用户不需要编译工程。
+                  </li>
+                </ol>
+                <p class="guide-callout">
+                  当前 Windows
+                  安装程序没有发布者签名。公司设备是否允许运行，由设备管理策略决定。
+                </p>
+              </div>
+              <div class="os-panel" data-os-panel="mac" hidden>
+                <h3>macOS · Apple 芯片</h3>
+                <ol>
+                  <li>
+                    使用产品提供方交付的 Mac Apple
+                    芯片安装包，按随包说明安装客户端。
+                  </li>
+                  <li>安装 Google Chrome，准备接待用的 Chrome 用户。</li>
+                  <li>保留安装包附带的扩展目录，下一步将在 Chrome 中加载。</li>
+                </ol>
+                <p class="guide-callout">
+                  当前提供的 Mac 安装包面向 Apple 芯片；不要把它当成已经交付的
+                  Intel Mac 版本。
+                </p>
+              </div>
+            </div>
+          </details>
+          <details id="connect" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">02 / 连接抖店</span
+                >登录你的飞鸽，核对你的店。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <ol class="guide-numbered">
+                <li>
+                  <strong>加载随包扩展。</strong> 在 Chrome 地址栏输入
+                  <code>chrome://extensions</code
+                  >，开启开发者模式，选择“加载已解压的扩展程序”，选中随安装包提供的扩展目录。
+                </li>
+                <li>
+                  <strong>打开店铺登录窗口。</strong>
+                  在客服精灵“店铺”页选择抖店与对应 Chrome
+                  用户，点击“打开店铺登录窗口”。
+                </li>
+                <li>
+                  <strong>完成飞鸽登录。</strong> 在 Chrome
+                  中完成账号登录与平台验证，验证码由你自行处理。
+                </li>
+                <li>
+                  <strong>核对识别结果。</strong>
+                  扩展自动连接后，核对客户端显示的店铺名称、连接状态与登录状态。
+                </li>
+              </ol>
+              <div class="guide-callout">
+                <strong>连接成功，不等于已经自动接待。</strong>
+                <p>
+                  扩展连接、店铺登录、模型就绪、知识发布和接待授权是不同状态，需要分别确认。
+                </p>
+              </div>
+              <h3>多家店怎么添加？</h3>
+              <p>
+                不同抖店账号使用独立 Chrome
+                用户。每个用户加载一次扩展，分别登录对应店铺，并逐店授权。同名店铺或店铺改名时，需要重新核对身份；仅在一个
+                Chrome 用户中切换账号，不能实现不同账号并行接待。
+              </p>
+            </div>
+          </details>
+          <details id="knowledge" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">03 / 知识与模型</span
+                >先给精灵可靠的资料。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <h3>把本店知识整理好</h3>
+              <p>
+                在知识库或“客服能力”中录入商品、活动、发货、话术和规则。文档与图片导入支持
+                PDF、DOCX、XLSX、CSV、TXT、Markdown、PNG、JPEG、WebP，单文件最多
+                20MB，每批最多 10 个。
+              </p>
+              <p>
+                提炼出的资料先进入候选。核对商品事实、价格说明与店铺政策后，再审核发布；未发布知识不会作为正式接待依据。
+              </p>
+              <div class="guide-callout">
+                <strong>自动采集也需要审核。</strong>
+                <p>
+                  飞鸽已打开、可识别的商家商品属性与店铺规则可整理为候选。它不代表扫描了全店商品，也不会把动态价格、库存、订单或买家正文沉淀为长期知识。
+                </p>
+              </div>
+              <h3>确认本机模型状态</h3>
+              <p>
+                打开“模型设置”，查看账户接入、剩余额度、文字与图片连接以及任务验证结果。详情页用于查看，不提供地址、密钥或型号录入；账户未接入时，需要先由产品提供方完成本机账户接入。
+              </p>
+              <p>
+                主页面右上角可以选择已经就绪的接待模型。只有连接通过还不够，正式接待还需要对应任务能力通过验收。当前支持的服务适配包括
+                DeepSeek、通义千问、智谱 GLM、Kimi 和
+                MiniMax，实际可用状态以本机显示为准。
+              </p>
+            </div>
+          </details>
+          <details id="reception" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">04 / 观察与授权</span
+                >从观察开始，再放心地交给精灵。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <ol class="guide-numbered">
+                <li>
+                  <strong>先观察或人工审核。</strong>
+                  核对实际咨询、知识引用和回复效果，确认本店资料适合接待。
+                </li>
+                <li>
+                  <strong>逐店确认接待授权。</strong>
+                  核对店名后，按客户端提示点击“授权并开启”。不同店铺分别授权。
+                </li>
+                <li>
+                  <strong>选择适合的接待模式。</strong>
+                  有依据的低风险咨询按授权处理。资料不足、模型异常或高风险问题转人工。
+                </li>
+                <li>
+                  <strong>持续关注待办。</strong>
+                  查看转人工、回复待确认、发送结果待核实及连接异常，按原因处理。
+                </li>
+              </ol>
+              <p class="guide-callout">
+                开启接待不会授权退款、赔付、改价、发券或账号操作。企业业务接口需要另行适配，并逐笔人工确认。
+              </p>
+            </div>
+          </details>
+          <details id="handoff" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">日常使用</span
+                >你随时可以接管，也随时可以暂停。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <p>
+                接待支持全局、平台和店铺三级暂停。恢复暂停不能代替店铺授权，也不会自动开启未授权店铺。
+              </p>
+              <p>
+                人工待办显示所属店铺与处理原因。发送结果尚未确认时，先核实原会话，不要重复发送。将待办“标记已处理”只更新待办记录，不会执行退款、重新授权或自动开启接待。
+              </p>
+              <p>
+                桌面提醒与企业微信、飞书、钉钉群机器人提醒分别配置。远程提醒默认关闭，配置并测试后再启用；网络、通知权限和系统状态会影响送达。
+              </p>
+            </div>
+          </details>
+          <details id="assistant" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">日常使用</span
+                >遇到不确定的事，找小二理一理。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <p>
+                小二面向客户端使用者，支持产品帮助、连接排查、客服业务咨询、话术写作、分析和知识草稿。明确目标店铺后，可以参考本店有限知识。
+              </p>
+              <p>
+                生成的知识草稿需要你编辑并确认保存，再到原店知识库核实、发布。小二不能自动操作电脑、浏览器或文件，也不能代替你授权接待、直接发消息或执行退款；目前没有实时联网搜索。
+              </p>
+              <p>
+                需要反馈问题时，可使用客户端左下角的“反馈”。提交是否成功以接收通道明确确认的回执为准；通道未配置或不可用时，内容保留在本机。
+              </p>
+            </div>
+          </details>
+          <details id="continuity" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">日常使用</span
+                >无人值守，也有明确的运行条件。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <p>
+                在连续运行设置中启用并保存“无人值守模式”，可在锁屏或关闭窗口后，按原店授权继续接待。关闭窗口时，客户端隐藏到菜单栏或系统托盘；真正退出应用仍会停止。
+              </p>
+              <p>
+                接待电脑需要保持通电联网，Chrome
+                登录有效且模型可用。系统休眠、断电、关机或合盖时，本机不能继续接待。登录失效、验证码、手动暂停或撤销授权，仍需要人工处理。
+              </p>
+              <div class="guide-callout">
+                <strong>这不是云端离线接待。</strong>
+                <p>
+                  macOS 支持可选的异常退出恢复；Windows
+                  尚无相同恢复任务。首次启用后，观察本店实际接待和提醒状态，确认电脑能够持续运行。
+                </p>
+              </div>
+            </div>
+          </details>
+          <details id="data" class="guide-section" name="guide-chapters">
+            <summary>
+              <h2>
+                <span class="guide-kicker">使用边界</span
+                >资料怎么用，操作谁决定。
+              </h2>
+            </summary>
+            <div class="guide-section-body">
+              <h3>官网展示</h3>
+              <p>
+                官网接待示例使用预置虚构资料，在浏览器本地切换，不调用模型、不连接店铺、不发送买家消息。准备清单只使用本浏览器的本地存储，你可以通过浏览器清除网站数据。官网没有统计追踪脚本或数据提交表单，托管平台可能保留基础访问日志。
+              </p>
+              <h3>客户端与模型</h3>
+              <p>
+                店铺知识、模型配置和小二历史在本机按现有加密机制保存。使用 AI
+                功能时，必要的问题、有限上下文与相关资料会发送到当前选定的模型服务。是否使用、保留或删除相关资料，请结合客户端设置和对应服务条款判断。
+              </p>
+              <h3>人工决定与实际验证</h3>
+              <p>
+                知识发布、店铺授权、重要业务动作由人确认。连接测试、程序模拟回归和真实店铺效果验收是不同层次；模型回答仍需结合实际商品与政策核对。当前实际接入抖店，其余平台待适配。
+              </p>
+            </div>
+          </details>
+          <div class="guide-bottom">
+            <strong>准备好了？先从本店知识开始。</strong
+            ><a class="button button-primary" href="index.html#product"
+              >再看看产品界面</a
+            >
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="site-footer container">
+      <a class="brand" href="index.html"
+        ><img src="assets/genie-mark.svg" width="32" height="32" alt="" /><span
+          >客服精灵</span
+        ></a
+      >
+      <nav aria-label="页脚导航">
+        <a href="index.html">产品首页</a><a href="#data">数据与接待边界</a
+        ><a href="index.html#faq">常见问题</a>
+      </nav>
+      <small>© 2026 客服精灵</small>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect x="32" y="32" width="960" height="960" rx="208" fill="#5856d6"/><svg xmlns="http://www.w3.org/2000/svg" x="128" y="128" width="768" height="768" viewBox="0 0 512 512" fill="#ffffff">
+  <title>客服精灵</title>
+  <defs>
+    <mask id="face" maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+      <rect width="512" height="512" fill="white" />
+      <circle cx="170" cy="254" r="24" fill="black" />
+      <circle cx="342" cy="254" r="24" fill="black" />
+      <path
+        d="M224 306Q256 330 288 306"
+        fill="none"
+        stroke="black"
+        stroke-width="24"
+        stroke-linecap="round"
+      />
+      <path
+        d="M461 288Q447 342 357 350"
+        fill="none"
+        stroke="black"
+        stroke-width="24"
+        stroke-linecap="round"
+      />
+      <circle cx="357" cy="350" r="24" fill="black" />
+    </mask>
+  </defs>
+  <path
+    d="M58 188C84 96 162 62 256 62S428 96 454 188"
+    fill="none"
+    stroke="#ffffff"
+    stroke-width="28"
+    stroke-linecap="round"
+  />
+  <g mask="url(#face)">
+    <path
+      d="M256 102C159 102 80 174 80 262S150 419 256 419C283 419 310 415 332 406L431 440C445 445 453 437 448 425L427 360C443 336 432 301 432 262C432 174 353 102 256 102Z"
+    />
+    <rect x="16" y="200" width="58" height="108" rx="29" />
+    <rect x="438" y="200" width="58" height="108" rx="29" />
+  </g>
+</svg>
+</svg>

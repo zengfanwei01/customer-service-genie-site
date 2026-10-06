@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="客服精灵是面向抖店商家的多店铺 AI 客服客户端。用本店知识接待咨询，让低风险问题有依据地回复，让复杂问题及时转人工。支持 Windows 与 macOS。"
+    />
+    <meta name="theme-color" content="#5856d6" />
+    <meta property="og:title" content="客服精灵 · 每一次咨询，都认真回应" />
+    <meta
+      property="og:description"
+      content="懂商品，记规则，接咨询。面向抖店商家的多店铺 AI 客服工作台。"
+    />
+    <meta property="og:type" content="website" />
+    <title>客服精灵 · 每一次咨询，都认真回应</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body class="compact-home">
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="客服精灵首页"
+          ><img
+            src="assets/genie-mark.svg"
+            width="42"
+            height="42"
+            alt=""
+          /><span>客服精灵<small>KEFU GENIE</small></span></a
+        >
+        <nav class="desktop-nav" aria-label="主要导航">
+          <a href="#capabilities">产品能力</a><a href="#product">产品界面</a
+          ><a href="#platforms">平台支持</a>
+        </nav>
+        <a class="button button-small button-dark header-cta" href="guide.html"
+          >使用指南</a
+        >
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-label="打开导航菜单"
+          aria-controls="mobile-nav"
+          aria-expanded="false"
+        >
+          <span></span><span></span>
+        </button>
+      </div>
+      <nav id="mobile-nav" class="mobile-nav" aria-label="手机导航" hidden>
+        <a href="#capabilities">产品能力</a><a href="#product">产品界面</a
+        ><a href="#platforms">平台支持</a><a href="#faq">常见问题</a
+        ><a href="guide.html">使用指南</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero container" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow">
+            <span class="tiny-mark" aria-hidden="true">✦</span>
+            电商客服，也可以从容一点
+          </p>
+          <h1 id="hero-title">
+            每一次咨询，<br />都<span class="accent">认真回应。</span>
+          </h1>
+          <p class="hero-description">
+            用本店知识接好日常咨询，<br />让你专注更需要人的时刻。
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="guide.html">了解如何开始</a
+            ><a class="button button-plain" href="#demo-preview"
+              ><span class="play-icon" aria-hidden="true">▶</span>
+              体验接待示例</a
+            >
+          </div>
+          <p class="hero-footnote">
+            Windows / macOS 客户端
+            <span class="separator" aria-hidden="true"></span> 当前支持抖店
+          </p>
+        </div>
+        <details id="demo-preview" class="hero-preview" open>
+          <summary>
+            <span
+              ><strong>体验精灵怎么接待</strong
+              ><small>商品、发货与售后 · 预置演示</small></span
+            ><span class="disclosure-mark" aria-hidden="true">+</span>
+          </summary>
+          <div class="hero-demo-wrap">
+            <div class="demo-window" aria-label="接待示例">
+              <div class="demo-titlebar">
+                <div class="window-dots" aria-hidden="true">
+                  <i></i><i></i><i></i>
+                </div>
+                <span>客服精灵 · 接待中心</span
+                ><span class="demo-titlebar-tag">演示</span>
+              </div>
+              <div class="demo-store">
+                <div class="store-avatar" aria-hidden="true">物</div>
+                <div>
+                  <strong>好物生活馆</strong><span>抖店 · 虚构示例店铺</span>
+                </div>
+                <div class="mode-chip">知识辅助接待</div>
+              </div>
+              <div class="demo-tabs" role="tablist" aria-label="选择接待场景">
+                <button
+                  id="demo-tab-product"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="demo-panel"
+                  data-scene="product"
+                >
+                  商品咨询</button
+                ><button
+                  id="demo-tab-shipping"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="demo-panel"
+                  tabindex="-1"
+                  data-scene="shipping"
+                >
+                  发货咨询</button
+                ><button
+                  id="demo-tab-refund"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="demo-panel"
+                  tabindex="-1"
+                  data-scene="refund"
+                >
+                  售后协助
+                </button>
+              </div>
+              <div
+                id="demo-panel"
+                class="demo-panel"
+                role="tabpanel"
+                aria-labelledby="demo-tab-product"
+                tabindex="0"
+              >
+                <div class="chat-buyer">
+                  <span class="chat-person">顾客</span>
+                  <p id="demo-question">这款保温杯是什么材质？容量多大呀？</p>
+                </div>
+                <div class="chat-genie">
+                  <img
+                    src="assets/genie-mark.svg"
+                    width="32"
+                    height="32"
+                    alt=""
+                  />
+                  <div>
+                    <div class="chat-heading">
+                      <strong>客服精灵</strong
+                      ><span id="demo-result-label">依据本店知识</span>
+                    </div>
+                    <p id="demo-answer">
+                      这款保温杯的内胆是 304 不锈钢，容量为
+                      500ml，日常通勤携带很方便。
+                    </p>
+                    <div id="demo-evidence" class="evidence">
+                      <span class="evidence-symbol" aria-hidden="true">▤</span
+                      ><span id="demo-source">引用：保温杯商品资料</span
+                      ><span class="evidence-check" aria-hidden="true">✓</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="demo-flow">
+                  <span>理解咨询</span><i aria-hidden="true"></i
+                  ><span>查找本店资料</span><i aria-hidden="true"></i
+                  ><span id="demo-final-step">核对回复依据</span>
+                </div>
+              </div>
+              <div class="demo-caption">
+                可切换场景体验 · 内容为预置示例，不调用模型或发送消息
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+      <section
+        id="capabilities"
+        class="section container"
+        aria-labelledby="capabilities-title"
+      >
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">一个工作台，照顾好每家店</p>
+            <h2 id="capabilities-title">四种能力，一起把接待做好。</h2>
+          </div>
+          <p class="section-description">选择你关心的，看看精灵怎样帮忙。</p>
+        </div>
+        <div class="capability-hub">
+          <div class="capability-tabs" role="tablist" aria-label="查看产品能力">
+            <button
+              id="capability-tab-stores"
+              role="tab"
+              aria-selected="true"
+              aria-controls="capability-stores"
+            >
+              <span aria-hidden="true">01</span>多店接待
+            </button>
+            <button
+              id="capability-tab-knowledge"
+              role="tab"
+              aria-selected="false"
+              aria-controls="capability-knowledge"
+              tabindex="-1"
+            >
+              <span aria-hidden="true">02</span>本店知识
+            </button>
+            <button
+              id="capability-tab-assistant"
+              role="tab"
+              aria-selected="false"
+              aria-controls="capability-assistant"
+              tabindex="-1"
+            >
+              <span aria-hidden="true">03</span>小二助手
+            </button>
+            <button
+              id="capability-tab-handoff"
+              role="tab"
+              aria-selected="false"
+              aria-controls="capability-handoff"
+              tabindex="-1"
+            >
+              <span aria-hidden="true">04</span>人工接管
+            </button>
+          </div>
+          <div class="capability-stage">
+            <article
+              id="capability-stores"
+              class="capability-panel"
+              role="tabpanel"
+              aria-labelledby="capability-tab-stores"
+              tabindex="0"
+            >
+              <div class="capability-copy">
+                <h3>店铺可以多，<br />接待不用乱。</h3>
+                <p>
+                  各店咨询与待办，一处查看。知识、授权与接待记录独立管理，回复始终对应原店。
+                </p>
+                <a class="text-link" href="guide.html#connect">了解多店连接</a>
+              </div>
+              <div class="store-board" aria-label="多店管理示意">
+                <div class="board-top">
+                  <strong>我的店铺</strong><span>示意</span>
+                </div>
+                <div class="store-row">
+                  <span class="shop-icon lilac" aria-hidden="true">物</span>
+                  <div>
+                    <strong>好物生活馆</strong><small>抖店 · 独立知识库</small>
+                  </div>
+                  <span class="store-state state-green">接待中</span>
+                </div>
+                <div class="store-row">
+                  <span class="shop-icon peach" aria-hidden="true">衣</span>
+                  <div>
+                    <strong>日常衣橱</strong><small>抖店 · 独立知识库</small>
+                  </div>
+                  <span class="store-state state-amber">人工接管</span>
+                </div>
+                <div class="store-row">
+                  <span class="shop-icon blue" aria-hidden="true">家</span>
+                  <div>
+                    <strong>有间家居</strong><small>抖店 · 独立知识库</small>
+                  </div>
+                  <span class="store-state state-neutral">待授权</span>
+                </div>
+                <div class="board-bottom">
+                  <span class="lock-icon" aria-hidden="true">▣</span>
+                  各店资料与接待授权分别保存
+                </div>
+              </div>
+            </article>
+            <article
+              id="capability-knowledge"
+              class="capability-panel"
+              role="tabpanel"
+              aria-labelledby="capability-tab-knowledge"
+              tabindex="0"
+              hidden
+            >
+              <div class="capability-copy">
+                <h3>好答案，<br />来自你的店。</h3>
+                <p>
+                  把商品资料、活动与售后规则整理成知识。先审核，再发布，让回答有本店依据。
+                </p>
+                <a class="text-link" href="guide.html#knowledge"
+                  >了解知识准备</a
+                >
+              </div>
+              <div class="knowledge-stack" aria-label="知识审核流程示意">
+                <div class="document-types">
+                  <span>PDF</span><span>Word</span><span>Excel</span
+                  ><span>图片</span>
+                </div>
+                <div class="knowledge-document">
+                  <span class="document-icon" aria-hidden="true">▤</span>
+                  <div>
+                    <strong>保温杯 · 商品资料</strong
+                    ><small>材质 / 容量 / 商品说明</small>
+                  </div>
+                  <span class="document-badge">已审核</span>
+                </div>
+                <div class="knowledge-trail">
+                  <span>资料整理</span><span>人工审核</span
+                  ><span class="trail-final">发布知识</span>
+                </div>
+              </div>
+            </article>
+            <article
+              id="capability-assistant"
+              class="capability-panel"
+              role="tabpanel"
+              aria-labelledby="capability-tab-assistant"
+              tabindex="0"
+              hidden
+            >
+              <div class="capability-copy">
+                <h3>不确定的事，<br />找小二理一理。</h3>
+                <p>
+                  产品使用、连接排查、话术写作与知识草稿，先帮你理清思路，重要操作仍由你确认。
+                </p>
+                <a class="text-link" href="guide.html#assistant"
+                  >了解小二能做什么</a
+                >
+              </div>
+              <div class="assistant-preview">
+                <div class="board-top">
+                  <strong>小二助手</strong><span>示意</span>
+                </div>
+                <p class="assistant-request">帮我整理一份发货说明</p>
+                <div class="assistant-response">
+                  <img
+                    src="assets/genie-mark.svg"
+                    width="32"
+                    height="32"
+                    alt=""
+                  />
+                  <div>
+                    <strong>先核对本店规则，再整理话术。</strong>
+                    <p>发货时效、适用商品、特殊情况。</p>
+                  </div>
+                </div>
+                <p class="preview-note">草稿由你确认，不自动发布或发送。</p>
+              </div>
+            </article>
+            <article
+              id="capability-handoff"
+              class="capability-panel"
+              role="tabpanel"
+              aria-labelledby="capability-tab-handoff"
+              tabindex="0"
+              hidden
+            >
+              <div class="capability-copy">
+                <h3>需要你时，<br />清楚地提醒。</h3>
+                <p>
+                  转人工、回复待确认、连接异常统一收纳。带上所属店铺与处理原因，接管更清楚。
+                </p>
+                <a class="text-link" href="guide.html#handoff"
+                  >了解接管与暂停</a
+                >
+              </div>
+              <div class="handoff-preview">
+                <div class="board-top">
+                  <strong>人工待办</strong><span>示意</span>
+                </div>
+                <div class="handoff-item">
+                  <span class="store-state state-amber">待人工核实</span>
+                  <h4>商品破损，申请退款</h4>
+                  <p>日常衣橱 · 售后问题</p>
+                  <div>核实订单与商品情况，由人工决定下一步。</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div id="experience" class="experience-inline">
+          <p>
+            <span>理解咨询</span><i aria-hidden="true">·</i
+            ><span>查找本店依据</span><i aria-hidden="true">·</i
+            ><span>按授权接待或转人工</span>
+          </p>
+          <a href="guide.html#reception">退款、赔付等重要事项由人决定</a>
+        </div>
+        <p class="section-note">以上店铺、商品与对话为虚构示例。</p>
+      </section>
+      <section
+        id="product"
+        class="section product-section"
+        aria-labelledby="product-title"
+      >
+        <div class="container product-layout">
+          <div class="product-copy">
+            <p class="eyebrow">看看真实工作台</p>
+            <h2 id="product-title">看清知识，<br />也看清接待。</h2>
+            <p>本店资料、发布状态和接待提醒，放在同一个工作台里。</p>
+            <ul class="product-points">
+              <li>资料先审核，再用于回答</li>
+              <li>接待与提醒状态清楚可见</li>
+              <li>复杂问题随时转人工</li>
+            </ul>
+            <details class="model-details">
+              <summary>模型适配与使用条件</summary>
+              <p>
+                已适配 DeepSeek、通义千问、智谱
+                GLM、Kimi、MiniMax。实际可用性取决于本机账户接入、额度、连接与任务验收状态。
+              </p>
+            </details>
+          </div>
+          <div class="product-view">
+            <div class="product-toolbar">
+              <div
+                class="product-tabs"
+                role="tablist"
+                aria-label="查看客户端界面"
+              >
+                <button
+                  id="product-tab-knowledge"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="product-panel"
+                  data-product="knowledge"
+                >
+                  知识与资料</button
+                ><button
+                  id="product-tab-continuity"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="product-panel"
+                  tabindex="-1"
+                  data-product="continuity"
+                >
+                  接待与提醒
+                </button>
+              </div>
+              <button class="zoom-button" type="button" data-open-image>
+                放大查看
+              </button>
+            </div>
+            <div
+              id="product-panel"
+              class="product-panel"
+              role="tabpanel"
+              aria-labelledby="product-tab-knowledge"
+              tabindex="0"
+            >
+              <button
+                class="screenshot-frame screenshot-button"
+                type="button"
+                data-open-image
+                aria-label="查看完整客户端截图"
+              >
+                <img
+                  id="product-screenshot"
+                  src="assets/product-knowledge.png"
+                  width="2880"
+                  height="1784"
+                  loading="lazy"
+                  alt="客服精灵知识与资料界面：本店商家资料采集、待审核知识与发布记录，展示模拟商品"
+                />
+              </button>
+              <div class="screenshot-caption">
+                <p id="product-description">
+                  商家资料先整理为候选，审核发布后，再用于接待。
+                </p>
+                <span>客户端 0.10.3 · 模拟店铺验收截图</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        id="start"
+        class="section container start-section"
+        aria-labelledby="start-title"
+      >
+        <div id="platforms" class="availability">
+          <div>
+            <span class="availability-status">已接入</span
+            ><strong>抖店 / 飞鸽</strong>
+            <p>Windows 10 / 11 x64 · macOS Apple 芯片</p>
+          </div>
+          <details class="other-platforms">
+            <summary>其他平台支持情况</summary>
+            <p>淘宝 / 天猫、京东、拼多多：待接入，目前不能连接或接待。</p>
+          </details>
+        </div>
+        <div class="start-heading">
+          <div>
+            <h2 id="start-title">让精灵认识你的店。</h2>
+            <p>安装客户端 · 连接抖店 · 准备知识 · 观察并授权</p>
+          </div>
+          <a class="button button-primary" href="guide.html">查看使用指南</a>
+        </div>
+        <div id="faq" class="faq-block">
+          <div class="faq-heading">
+            <h3>开始前，你可能想问</h3>
+            <a class="text-link" href="guide.html">更多使用说明</a>
+          </div>
+          <div class="faq-list">
+            <details name="home-questions">
+              <summary>手机也能使用客服精灵吗？</summary>
+              <p>
+                官网可以在手机和平板浏览器中查看。客服精灵接待客户端目前运行于
+                Windows 或 macOS 电脑，手机不能代替桌面客户端执行店铺接待。
+              </p>
+            </details>
+            <details name="home-questions">
+              <summary>会自动处理退款、赔付吗？</summary>
+              <p>
+                不会。退款、赔付、改价等重要业务需要人工处理。遇到这些问题，精灵会提供处理线索并转入人工待办，由你核实和决定下一步。
+              </p>
+            </details>
+            <details name="home-questions">
+              <summary>几家店的商品知识会混在一起吗？</summary>
+              <p>
+                各店知识、授权和接待记录独立管理。多个抖店账号使用独立 Chrome
+                用户，分别登录与授权；店铺名称相同或改名时，需要重新核对身份。
+              </p>
+            </details>
+            <details name="home-questions">
+              <summary>电脑关机后，还能继续接待吗？</summary>
+              <p>
+                不能。客户端在本机运行，电脑需保持通电联网，Chrome
+                登录有效且模型可用。开启并保存无人值守模式后，可在锁屏或隐藏窗口时按原授权继续接待；系统休眠、断电或退出应用会停止。
+              </p>
+            </details>
+            <details name="home-questions">
+              <summary>店铺资料会发送到哪里？</summary>
+              <p>
+                客户端在本机保存店铺知识与配置。使用 AI
+                功能时，相关问题、有限上下文和必要资料会发送至当前选定的模型服务。官网演示使用预置虚构资料，不读取你的店铺或买家消息。
+              </p>
+            </details>
+            <details name="home-questions">
+              <summary>现在可以使用淘宝、京东和拼多多吗？</summary>
+              <p>
+                当前实际接入抖店飞鸽。淘宝 /
+                天猫、京东和拼多多仍待适配，不能把平台出现在目录中理解为已经可连接或接待。
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer container">
+      <a class="brand" href="index.html"
+        ><img src="assets/genie-mark.svg" width="32" height="32" alt="" /><span
+          >客服精灵</span
+        ></a
+      >
+      <nav aria-label="页脚导航">
+        <a href="guide.html">使用指南</a
+        ><a href="guide.html#data">数据与接待边界</a><a href="#faq">常见问题</a>
+      </nav>
+      <small>© 2026 客服精灵</small>
+    </footer>
+    <dialog class="image-dialog" aria-labelledby="image-dialog-title">
+      <div class="dialog-toolbar">
+        <strong id="image-dialog-title">客户端界面</strong>
+        <div class="dialog-controls">
+          <button class="dialog-zoom" type="button" aria-pressed="false">
+            查看实际尺寸</button
+          ><button class="dialog-close" type="button" aria-label="关闭大图">
+            关闭 <span aria-hidden="true">×</span>
+          </button>
+        </div>
+      </div>
+      <div class="dialog-image-wrap">
+        <img
+          src="assets/product-knowledge.png"
+          width="2880"
+          height="1784"
+          alt=""
+        />
+      </div>
+      <p>模拟店铺验收截图 · 可切换实际尺寸，滚动查看细节</p>
+    </dialog>
+  </body>
+</html>
